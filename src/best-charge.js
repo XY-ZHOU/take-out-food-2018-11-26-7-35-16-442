@@ -87,3 +87,7 @@ function outputDiscount(itemName, discount, fullReductionDiscount, param) {
 function judgeObjectProperty(obj, property) {
   return obj.hasOwnProperty(property);
 }
+
+function judgeElementInArr(arr, element) {
+  return arr.indexOf(element) != -1;
+}
