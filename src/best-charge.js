@@ -1,5 +1,10 @@
 function bestCharge(selectedItems) {
-  return /*TODO*/;
+  let inputArr = transformSelectedItems(selectedItems);
+  let allItemsArr = loadAllItems();
+  let discountType = loadPromotions();
+  let allOrderMessage = orderObj(allItemsArr, inputArr);
+  let finalResultObj = caculateDiscountType(allOrderMessage, discountType);
+  return output(finalResultObj);
 }
 
 function transformSelectedItems(selectedItems) {
