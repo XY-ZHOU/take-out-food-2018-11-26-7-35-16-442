@@ -83,3 +83,7 @@ function outputDiscount(itemName, discount, fullReductionDiscount, param) {
     return "使用优惠:\n" + '满30减6元，省' + fullReductionDiscount + "元" + "\n" + "-----------------------------------";
   }
 }
+
+function judgeObjectProperty(obj, property) {
+  return obj.hasOwnProperty(property);
+}
