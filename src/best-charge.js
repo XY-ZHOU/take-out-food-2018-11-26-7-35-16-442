@@ -29,3 +29,41 @@ function orderObj(allItemsArr, inputArr) {
   }
   return allOrderMessageArr;
 }
+
+function caculateDiscountType(allOrderMessage, discountType) {
+  let orderContent = [];
+  let sum = 0;
+  let discount = 0;
+  let itemName = [];
+  let fullReductionDiscount;
+  let finalResultObj = {};
+  for (let i = 0; i < allOrderMessage.length; i++) {
+    orderContent.push(allOrderMessage[i].name + ' x' + allOrderMessage[i].count + ' = ' + allOrderMessage[i].itemSum + "元");
+    sum += allOrderMessage[i].itemSum;
+    if (judgeElementInArr(discountType[1].items, allOrderMessage[i].id)) {
+      discount += allOrderMessage[i].itemSum / 2;
+      itemName.push(allOrderMessage[i].name);
+    }
+  }
+  finalResultObj.orderContent = orderContent;
+  if (sum > 30) {
+    fullReductionDiscount = parseInt(sum / 30) * 6;
+  }
+  if (sum < 30) {
+    if (!discount) {
+      finalResultObj.finalCharge = sum;
+    } else {
+      finalResultObj.finalCharge = sum - discount;
+      finalResultObj.finalDiscount = outputDiscount(itemName, discount, fullReductionDiscount, 1);
+    }
+  } else if (sum >= 30) {
+    if (discount && fullReductionDiscount < discount) {
+      finalResultObj.finalCharge = sum - discount;
+      finalResultObj.finalDiscount = outputDiscount(itemName, discount, fullReductionDiscount, 1);
+    } else {
+      finalResultObj.finalCharge = sum - fullReductionDiscount;
+      finalResultObj.finalDiscount = outputDiscount(itemName, discount, fullReductionDiscount, -1);
+    }
+  }
+  return finalResultObj;
+}
