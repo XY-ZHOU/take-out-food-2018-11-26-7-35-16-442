@@ -67,3 +67,11 @@ function caculateDiscountType(allOrderMessage, discountType) {
   }
   return finalResultObj;
 }
+
+function outputDiscount(itemName, discount, fullReductionDiscount, param) {
+  if (param == 1) {
+    return "使用优惠:\n" + "指定菜品半价(" + itemName.join('，') + ")，省" + discount + "元" + "\n" + "-----------------------------------";
+  } else if (param == -1) {
+    return "使用优惠:\n" + '满30减6元，省' + fullReductionDiscount + "元" + "\n" + "-----------------------------------";
+  }
+}
