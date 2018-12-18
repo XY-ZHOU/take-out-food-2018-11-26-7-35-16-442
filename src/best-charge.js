@@ -68,6 +68,14 @@ function caculateDiscountType(allOrderMessage, discountType) {
   return finalResultObj;
 }
 
+function output(finalResultObj) {
+  if (judgeObjectProperty(finalResultObj, "finalDiscount")) {
+    return "============= 订餐明细 =============" + "\n" + finalResultObj.orderContent.join('\n') + "\n-----------------------------------" + "\n" + finalResultObj.finalDiscount + "\n" + "总计：" + finalResultObj.finalCharge + "元" + "\n" + "===================================";
+  } else {
+    return "============= 订餐明细 =============" + "\n" + finalResultObj.orderContent.join('\n') + "\n-----------------------------------" + "\n" + "总计：" + finalResultObj.finalCharge + "元" + "\n" + "===================================";
+  }
+}
+
 function outputDiscount(itemName, discount, fullReductionDiscount, param) {
   if (param == 1) {
     return "使用优惠:\n" + "指定菜品半价(" + itemName.join('，') + ")，省" + discount + "元" + "\n" + "-----------------------------------";
