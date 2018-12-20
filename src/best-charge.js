@@ -3,26 +3,27 @@ function bestCharge(selectedItems) {
   let allItemsArr = loadAllItems();
   let discountType = loadPromotions();
   let allOrderMessage = allMessageOfOrder(allItemsArr, selectedObj);
-  let finalResultObj = calculateDiscountType(allOrderMessage, discountType);
+  let finalResultObj = finalDiscountType(allOrderMessage, discountType);
   return output(finalResultObj);
 }
 
 function transformSelectedItems(selectedItems) {
   let selectedObj ={} ;
-  let itemArr = [];
-  let countArr = [];
+   let itemArr = [];
+   let countArr = [];
   for(let element of selectedItems){
     itemArr.push(element.slice(0, element.indexOf("x") - 1));
     countArr.push(element.slice(element.indexOf("x") + 1));
   }
   selectedObj.items=itemArr;
   selectedObj.counts=countArr;
+
   return selectedObj;
 }
 
 function allMessageOfOrder(allItemsArr, selectedObj) {
   let allOrderMessage = [];
-  for (let element of allItemsArr) {
+  for (let element of  allItemsArr) {
     if (isElementInArr(selectedObj.items, element.id)) {
       let index = (selectedObj.items).indexOf(element.id);
       element.count = parseInt(selectedObj.counts[index]);
@@ -33,12 +34,12 @@ function allMessageOfOrder(allItemsArr, selectedObj) {
   return allOrderMessage;
 }
 
-function calculateDiscountType(allOrderMessage, discountType) {
+function finalDiscountType(allOrderMessage, discountType) {
   let orderContent = [];
   let notDiscountPrice = 0;
   let halfDiscount = 0;
   let halfDiscountItem = [];
-  let fullReductionDiscount;
+  let fullReductionDiscount = 0;
   let finalResultObj = {};
   for (let i = 0; i < allOrderMessage.length; i++) {
     orderContent.push(allOrderMessage[i].name + ' x ' + allOrderMessage[i].count + ' = ' + allOrderMessage[i].itemSum + "元");
@@ -52,15 +53,20 @@ function calculateDiscountType(allOrderMessage, discountType) {
   if (notDiscountPrice > 30) {
     fullReductionDiscount = parseInt(notDiscountPrice / 30) * 6;
   }
+  finalResultObj = calculateDiscountType(notDiscountPrice,fullReductionDiscount,halfDiscount,halfDiscountItem,finalResultObj);
+  return finalResultObj;
+}
+
+function calculateDiscountType(notDiscountPrice,fullReductionDiscount,halfDiscount,halfDiscountItem ,finalResultObj){
   if (notDiscountPrice < 30) {
-    if (!halfDiscount) {
+    if (halfDiscount = 0) {
       finalResultObj.finalCharge = notDiscountPrice;
     } else {
       finalResultObj.finalCharge = notDiscountPrice - halfDiscount;
       finalResultObj.finalDiscount = outputDiscount(halfDiscountItem, halfDiscount, fullReductionDiscount, 1);
     }
   } else if (notDiscountPrice >= 30) {
-    if (halfDiscount && fullReductionDiscount < halfDiscount) {
+    if (fullReductionDiscount < halfDiscount) {
       finalResultObj.finalCharge = notDiscountPrice - halfDiscount;
       finalResultObj.finalDiscount = outputDiscount(halfDiscountItem, halfDiscount, fullReductionDiscount, 1);
     } else {
