@@ -78,11 +78,8 @@ function calculateDiscountType(notDiscountPrice,fullReductionDiscount,halfDiscou
 }
 
 function output(finalResultObj) {
-  if (judgeObjectProperty(finalResultObj, "finalDiscount")) {
-    return "============= 订餐明细 =============" + "\n" + finalResultObj.orderContent.join('\n') + "\n-----------------------------------" + "\n" + finalResultObj.finalDiscount + "\n" + "总计：" + finalResultObj.finalCharge + "元" + "\n" + "===================================";
-  } else {
-    return "============= 订餐明细 =============" + "\n" + finalResultObj.orderContent.join('\n') + "\n-----------------------------------" + "\n" + "总计：" + finalResultObj.finalCharge + "元" + "\n" + "===================================";
-  }
+  let discountContent =judgeObjectProperty(finalResultObj, "finalDiscount")?finalResultObj.finalDiscount+ "\n":"";
+  return "============= 订餐明细 =============" + "\n" + finalResultObj.orderContent.join('\n') + "\n-----------------------------------" + "\n" + discountContent  + "总计：" + finalResultObj.finalCharge + "元" + "\n" + "===================================";
 }
 
 function outputDiscount(halfDiscountItem, halfDiscount, fullReductionDiscount, param) {
