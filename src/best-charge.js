@@ -23,7 +23,7 @@ function transformSelectedItems(selectedItems) {
 function orderObj(allItemsArr, selectedObj) {
   let allOrderMessageArr = [];
   for (let i = 0; i < allItemsArr.length; i++) {
-    if (judgeElementInArr(selectedObj.items, allItemsArr[i].id)) {
+    if (isElementInArr(selectedObj.items, allItemsArr[i].id)) {
       let index = selectedObj.items.indexOf(allItemsArr[i].id);
       allItemsArr[i].count = selectedObj.counts[index];
       allItemsArr[i].itemSum = selectedObj.counts[index] * allItemsArr[i].price;
@@ -43,7 +43,7 @@ function caculateDiscountType(allOrderMessage, discountType) {
   for (let i = 0; i < allOrderMessage.length; i++) {
     orderContent.push(allOrderMessage[i].name + ' x' + allOrderMessage[i].count + ' = ' + allOrderMessage[i].itemSum + "元");
     sum += allOrderMessage[i].itemSum;
-    if (judgeElementInArr(discountType[1].items, allOrderMessage[i].id)) {
+    if (isElementInArr(discountType[1].items, allOrderMessage[i].id)) {
       discount += allOrderMessage[i].itemSum / 2;
       itemName.push(allOrderMessage[i].name);
     }
@@ -91,6 +91,6 @@ function judgeObjectProperty(obj, property) {
   return obj.hasOwnProperty(property);
 }
 
-function judgeElementInArr(arr, element) {
-  return arr.indexOf(element) != -1;
+function isElementInArr(arr, element) {
+  return arr.includes(element);
 }
