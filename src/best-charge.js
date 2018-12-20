@@ -20,17 +20,17 @@ function transformSelectedItems(selectedItems) {
   return selectedObj;
 }
 
-function orderObj(allItemsArr, selectedObj) {
-  let allOrderMessageArr = [];
-  for (let i = 0; i < allItemsArr.length; i++) {
-    if (isElementInArr(selectedObj.items, allItemsArr[i].id)) {
-      let index = selectedObj.items.indexOf(allItemsArr[i].id);
-      allItemsArr[i].count = selectedObj.counts[index];
-      allItemsArr[i].itemSum = selectedObj.counts[index] * allItemsArr[i].price;
-      allOrderMessageArr.push(allItemsArr[i]);
+function allMessageOfOrder(allItemsArr, selectedObj) {
+  let allOrderMessage = [];
+  for (let element of allItemsArr) {
+    if (isElementInArr(selectedObj.items, element.id)) {
+      let index = (selectedObj.items).indexOf(element.id);
+      element.count = parseInt(selectedObj.counts[index]);
+      element.itemSum = element.count * element.price;
+      allOrderMessage.push(element);
     }
   }
-  return allOrderMessageArr;
+  return allOrderMessage;
 }
 
 function caculateDiscountType(allOrderMessage, discountType) {
