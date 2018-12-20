@@ -1,34 +1,32 @@
 function bestCharge(selectedItems) {
-  let inputArr = transformSelectedItems(selectedItems);
+  let selectedObj = transformSelectedItems(selectedItems);
   let allItemsArr = loadAllItems();
   let discountType = loadPromotions();
-  let allOrderMessage = orderObj(allItemsArr, inputArr);
+  let allOrderMessage = orderObj(allItemsArr, selectedObj);
   let finalResultObj = caculateDiscountType(allOrderMessage, discountType);
   return output(finalResultObj);
 }
 
 function transformSelectedItems(selectedItems) {
-  let inputArr = [],
-    itemArr = [],
-    countArr = [];
-  for (let i = 0; i < selectedItems.length; i++) {
-    let itemId = selectedItems[i].slice(0, selectedItems[i].indexOf("x") - 1);
-    let count = selectedItems[i].slice(selectedItems[i].indexOf("x") + 1);
-    itemArr.push(itemId);
-    countArr.push(count);
+  let selectedObj ={} ;
+  let itemArr = [];
+  let countArr = [];
+  for(let element of selectedItems){
+    itemArr.push(element.slice(0, element.indexOf("x") - 1));
+    countArr.push(element.slice(element.indexOf("x") + 1));
   }
-  inputArr.push(itemArr);
-  inputArr.push(countArr);
-  return inputArr;
+  selectedObj.items=itemArr;
+  selectedObj.counts=countArr;
+  return selectedObj;
 }
 
-function orderObj(allItemsArr, inputArr) {
+function orderObj(allItemsArr, selectedObj) {
   let allOrderMessageArr = [];
   for (let i = 0; i < allItemsArr.length; i++) {
-    if (judgeElementInArr(inputArr[0], allItemsArr[i].id)) {
-      let index = inputArr[0].indexOf(allItemsArr[i].id);
-      allItemsArr[i].count = inputArr[1][index];
-      allItemsArr[i].itemSum = inputArr[1][index] * allItemsArr[i].price;
+    if (judgeElementInArr(selectedObj.items, allItemsArr[i].id)) {
+      let index = selectedObj.items.indexOf(allItemsArr[i].id);
+      allItemsArr[i].count = selectedObj.counts[index];
+      allItemsArr[i].itemSum = selectedObj.counts[index] * allItemsArr[i].price;
       allOrderMessageArr.push(allItemsArr[i]);
     }
   }
