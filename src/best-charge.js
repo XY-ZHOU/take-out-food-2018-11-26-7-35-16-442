@@ -2,8 +2,8 @@ function bestCharge(selectedItems) {
   let selectedObj = transformSelectedItems(selectedItems);
   let allItemsArr = loadAllItems();
   let discountType = loadPromotions();
-  let allOrderMessage = orderObj(allItemsArr, selectedObj);
-  let finalResultObj = caculateDiscountType(allOrderMessage, discountType);
+  let allOrderMessage = allMessageOfOrder(allItemsArr, selectedObj);
+  let finalResultObj = calculateDiscountType(allOrderMessage, discountType);
   return output(finalResultObj);
 }
 
@@ -33,39 +33,39 @@ function allMessageOfOrder(allItemsArr, selectedObj) {
   return allOrderMessage;
 }
 
-function caculateDiscountType(allOrderMessage, discountType) {
+function calculateDiscountType(allOrderMessage, discountType) {
   let orderContent = [];
-  let sum = 0;
-  let discount = 0;
-  let itemName = [];
+  let notDiscountPrice = 0;
+  let halfDiscount = 0;
+  let halfDiscountItem = [];
   let fullReductionDiscount;
   let finalResultObj = {};
   for (let i = 0; i < allOrderMessage.length; i++) {
-    orderContent.push(allOrderMessage[i].name + ' x' + allOrderMessage[i].count + ' = ' + allOrderMessage[i].itemSum + "元");
-    sum += allOrderMessage[i].itemSum;
+    orderContent.push(allOrderMessage[i].name + ' x ' + allOrderMessage[i].count + ' = ' + allOrderMessage[i].itemSum + "元");
+    notDiscountPrice += allOrderMessage[i].itemSum;
     if (isElementInArr(discountType[1].items, allOrderMessage[i].id)) {
-      discount += allOrderMessage[i].itemSum / 2;
-      itemName.push(allOrderMessage[i].name);
+      halfDiscount += allOrderMessage[i].itemSum / 2;
+      halfDiscountItem.push(allOrderMessage[i].name);
     }
   }
   finalResultObj.orderContent = orderContent;
-  if (sum > 30) {
-    fullReductionDiscount = parseInt(sum / 30) * 6;
+  if (notDiscountPrice > 30) {
+    fullReductionDiscount = parseInt(notDiscountPrice / 30) * 6;
   }
-  if (sum < 30) {
-    if (!discount) {
-      finalResultObj.finalCharge = sum;
+  if (notDiscountPrice < 30) {
+    if (!halfDiscount) {
+      finalResultObj.finalCharge = notDiscountPrice;
     } else {
-      finalResultObj.finalCharge = sum - discount;
-      finalResultObj.finalDiscount = outputDiscount(itemName, discount, fullReductionDiscount, 1);
+      finalResultObj.finalCharge = notDiscountPrice - halfDiscount;
+      finalResultObj.finalDiscount = outputDiscount(halfDiscountItem, halfDiscount, fullReductionDiscount, 1);
     }
-  } else if (sum >= 30) {
-    if (discount && fullReductionDiscount < discount) {
-      finalResultObj.finalCharge = sum - discount;
-      finalResultObj.finalDiscount = outputDiscount(itemName, discount, fullReductionDiscount, 1);
+  } else if (notDiscountPrice >= 30) {
+    if (halfDiscount && fullReductionDiscount < halfDiscount) {
+      finalResultObj.finalCharge = notDiscountPrice - halfDiscount;
+      finalResultObj.finalDiscount = outputDiscount(halfDiscountItem, halfDiscount, fullReductionDiscount, 1);
     } else {
-      finalResultObj.finalCharge = sum - fullReductionDiscount;
-      finalResultObj.finalDiscount = outputDiscount(itemName, discount, fullReductionDiscount, -1);
+      finalResultObj.finalCharge = notDiscountPrice - fullReductionDiscount;
+      finalResultObj.finalDiscount = outputDiscount(halfDiscountItem, halfDiscount, fullReductionDiscount, -1);
     }
   }
   return finalResultObj;
@@ -79,9 +79,9 @@ function output(finalResultObj) {
   }
 }
 
-function outputDiscount(itemName, discount, fullReductionDiscount, param) {
+function outputDiscount(halfDiscountItem, halfDiscount, fullReductionDiscount, param) {
   if (param == 1) {
-    return "使用优惠:\n" + "指定菜品半价(" + itemName.join('，') + ")，省" + discount + "元" + "\n" + "-----------------------------------";
+    return "使用优惠:\n" + "指定菜品半价(" + halfDiscountItem.join('，') + ")，省" + halfDiscount + "元" + "\n" + "-----------------------------------";
   } else if (param == -1) {
     return "使用优惠:\n" + '满30减6元，省' + fullReductionDiscount + "元" + "\n" + "-----------------------------------";
   }
